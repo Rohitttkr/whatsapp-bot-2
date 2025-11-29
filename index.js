@@ -11,6 +11,21 @@ app.get('/', (req, res) => {
     res.send('✅ WhatsApp bot is running!');
 });
 
+
+
+import qrcode from 'qrcode-terminal';
+import fs from 'fs';
+
+conn.ev.on('connection.update', async (update) => {
+  const { qr } = update;
+  if (qr) {
+    console.log("QR RECEIVED... Saving QR Code");
+    const QR = await qrcode.generate(qr, { small: false });
+    fs.writeFileSync("qr.png", QR);
+  }
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
@@ -62,3 +77,4 @@ function scheduleMessages() {
 
 // Start WhatsApp client
 client.initialize();
+
