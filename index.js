@@ -13,9 +13,6 @@ app.get('/', (req, res) => {
 
 
 
-import qrcode from 'qrcode-terminal';
-import fs from 'fs';
-
 conn.ev.on('connection.update', async (update) => {
   const { qr } = update;
   if (qr) {
@@ -25,6 +22,11 @@ conn.ev.on('connection.update', async (update) => {
   }
 });
 
+app.get('/qr', (req, res) => {
+  const img = readFileSync('./qr.png');
+  res.setHeader('Content-Type', 'image/png');
+  res.send(img);
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
@@ -77,4 +79,5 @@ function scheduleMessages() {
 
 // Start WhatsApp client
 client.initialize();
+
 
